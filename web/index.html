@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escher Tiling &amp; Coloring</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Escher Tiling <span class="amp">&amp;</span> Coloring</h1>
+</header>
+
+<main>
+  <section class="pane" id="editor-pane">
+    <div class="pane-head">
+      <h2>Unit tile</h2>
+      <span class="hint">click grid points to draw a piece · click the first point to close · drag a vertex to move it · Esc cancels · Backspace undoes a vertex · shift-click a crossing to flip over/under</span>
+    </div>
+    <canvas id="editor" width="560" height="560"></canvas>
+    <div class="controls">
+      <label>grid
+        <input type="number" id="grid-size" min="2" max="33" step="1" value="6">
+      </label>
+      <label>preset
+        <select id="preset">
+          <option value="">—</option>
+          <option value="strip">Single Strip</option>
+          <option value="weave">Basket Weave</option>
+          <option value="diagonal">Diagonal Weave</option>
+          <option value="ogden">Ogden Thesis Tile</option>
+        </select>
+      </label>
+      <label><input type="checkbox" id="diagonal-conn" checked> corner connections</label>
+      <button id="clear">Clear tile</button>
+      <button id="export">Export JSON</button>
+      <button id="import">Import JSON</button>
+      <button id="copy-link">Copy Link</button>
+      <button id="download-tile">Tile PNG</button>
+      <button id="download-bigtile">Big Tile PNG</button>
+      <input type="file" id="import-file" accept=".json" hidden>
+    </div>
+    <ul id="piece-list"></ul>
+    <p id="status" role="status"></p>
+  </section>
+
+  <section class="pane" id="wallpaper-pane">
+    <div class="pane-head">
+      <h2>Wallpaper</h2>
+      <span class="hint"><span class="reg-mark"></span> Big Tile — the block of unit tiles whose coloring repeats</span>
+      <label class="hint"><input type="checkbox" id="rails" checked> rails</label>
+    </div>
+    <canvas id="wallpaper" width="560" height="560"></canvas>
+    <dl id="readout"></dl>
+    <div class="controls" id="generate-controls">
+      <input type="text" id="prompt" size="34"
+             value="woven glazed ceramic ribbons, ornamental tilework, studio light">
+      <label>seed <input type="number" id="gen-seed" value="0" style="width:4.5rem"></label>
+      <label title="Background color (live view, exports, and generation)">bg
+        <input type="color" id="bg-color" value="#ffffff"></label>
+      <input type="text" id="bg-prompt" size="16" placeholder="background prompt…">
+      <label>seeds <select id="gen-count"><option>1</option><option>2</option><option selected>4</option><option>6</option></select></label>
+      <label title="How far the model may repaint: low stays close to the computed flat colors, high paints freely (the rails still hold the geometry)">stylization
+        <input type="range" id="gen-strength" min="50" max="95" value="90">
+      </label>
+      <button id="generate">Generate artwork</button>
+    </div>
+    <p id="gen-status" class="hint"></p>
+    <div id="gen-result"></div>
+  </section>
+</main>
+
+<footer>
+  <p>Source code: <a href="https://github.com/DBraun/EscherColoring">github.com/DBraun/EscherColoring</a></p>
+  <p>
+    References:
+    <a href="https://dx.doi.org/10.14288/1.0051682">Gethner, <em>Computational Aspects of Escher Tilings</em> (PhD thesis, University of British Columbia 2002)</a> ·
+    <a href="https://digital.auraria.edu/works/publication-dissertation/ds616-sey88">Ogden, <em>Automating Escher Tiling and Coloring</em> (M.S. thesis, University of Colorado Denver 2004)</a> ·
+    <a href="https://www.eschertiles.com/">Passiouras, eschertiles.com</a>
+  </p>
+</footer>
+
+<script src="config.js"></script>
+<script src="pyodide-loader.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+name: Deploy to GitHub Pages
+
+# Publishes the interactive demo as a static site. The coloring algorithm runs
+# in the browser via Pyodide (see web/pyodide-loader.js), so no backend is
+# needed; the GPU-only artwork generator is disabled in this build.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Allow the deployment to publish to Pages, but only one at a time.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Assemble static site
+        run: |
+          mkdir -p _site/escher
+          cp web/index.html web/style.css web/app.js web/pyodide-loader.js _site/
+          # The in-browser coloring pipeline (no torch/PIL): these mirror the
+          # module list in web/pyodide-loader.js.
+          cp escher/__init__.py \
+             escher/lattice.py \
+             escher/periods.py \
+             escher/forbidden.py \
+             escher/bigtile.py \
+             escher/coloring.py \
+             escher/tile.py \
+             escher/api.py \
+             _site/escher/
+          # Switch the app to the in-browser engine (overrides web/config.js).
+          echo 'window.ESCHER_STATIC = true;' > _site/config.js
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

@@ -1,0 +1,226 @@
+/* Drafting-table instrument: blueprint-grey paper, india ink, registration red. */
+
+:root {
+  --paper: #e8ecf1;
+  --paper-deep: #dde3ea;
+  --ink: #1b2430;
+  --ink-soft: #4a5568;
+  --grid-line: #c3cedb;
+  --registration: #c22e1f;
+  --pane-bg: #f4f6f9;
+}
+
+* { box-sizing: border-box; margin: 0; }
+
+body {
+  background: var(--paper);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 28px 28px;
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header { padding: 2rem 2.5rem 1rem; }
+
+h1 {
+  font-family: "Iowan Old Style", Palatino, "Palatino Linotype", Georgia, serif;
+  font-weight: 500;
+  font-size: 2.1rem;
+  letter-spacing: 0.01em;
+}
+
+h1 .amp { font-style: italic; color: var(--registration); }
+
+.subtitle {
+  font-family: ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 0.4rem;
+}
+
+main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 1rem 2.5rem 2rem;
+  align-items: flex-start;
+}
+
+.pane {
+  background: var(--pane-bg);
+  border: 1px solid var(--ink);
+  box-shadow: 4px 4px 0 rgba(27, 36, 48, 0.14);
+  padding: 1rem 1.25rem 1.25rem;
+  /* Small flex-basis so the two panes stay side by side well into tablet
+     widths; the canvases scale down with them (width: 100%). */
+  flex: 1 1 320px;
+  min-width: 0;
+  max-width: 640px;
+}
+
+.pane-head {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+h2 {
+  font-family: ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.hint { font-size: 0.75rem; color: var(--ink-soft); }
+
+.reg-mark {
+  display: inline-block;
+  width: 0.7em; height: 0.7em;
+  border: 2px solid var(--registration);
+  vertical-align: baseline;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: white;
+  border: 1px solid var(--ink);
+  cursor: crosshair;
+}
+
+#wallpaper { cursor: default; }
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  align-items: center;
+  margin-top: 0.75rem;
+  font-family: ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+}
+
+label { display: inline-flex; gap: 0.4rem; align-items: center; letter-spacing: 0.06em; }
+
+select, button, #grid-size {
+  font: inherit;
+  background: white;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+}
+
+#grid-size { width: 4rem; cursor: text; }
+
+button:hover, select:hover, #grid-size:hover { background: var(--paper-deep); }
+
+button:focus-visible, select:focus-visible, #grid-size:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--registration);
+  outline-offset: 2px;
+}
+
+#piece-list {
+  list-style: none;
+  margin-top: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+#piece-list li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+  border: 1px solid var(--ink-soft);
+  background: white;
+  padding: 0.15rem 0.3rem 0.15rem 0.5rem;
+  cursor: pointer;
+}
+
+#piece-list li:hover {
+  border-color: var(--registration);
+  box-shadow: 2px 2px 0 rgba(194, 46, 31, 0.35);
+}
+
+#piece-list .swatch {
+  width: 0.75em; height: 0.75em;
+  border: 1px solid var(--ink);
+  display: inline-block;
+}
+
+#piece-list button {
+  border: none;
+  padding: 0 0.25rem;
+  font-size: 0.9em;
+  background: none;
+}
+
+#piece-list button:hover { color: var(--registration); background: none; }
+
+#status {
+  min-height: 1.2em;
+  margin-top: 0.6rem;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  font-size: 0.75rem;
+  color: var(--registration);
+}
+
+#readout {
+  margin-top: 0.9rem;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 0.3rem 1.2rem;
+  font-family: ui-monospace, "Cascadia Mono", Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+}
+
+#readout dt {
+  color: var(--ink-soft);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  align-self: baseline;
+}
+
+#readout dd { word-break: break-word; }
+
+footer {
+  margin-top: auto;
+  padding: 1rem 2.5rem 1.5rem;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  max-width: 72rem;
+}
+
+footer a { color: var(--ink); }
+
+@media (max-width: 900px) {
+  header { padding: 1.5rem 1.25rem 0.75rem; }
+  main, footer { padding-left: 1.25rem; padding-right: 1.25rem; }
+}
+
+@media (max-width: 560px) {
+  header, main, footer { padding-left: 0.75rem; padding-right: 0.75rem; }
+  main { gap: 1rem; }
+  .pane { padding: 0.75rem; max-width: none; }
+  h1 { font-size: 1.7rem; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  canvas { transition: opacity 120ms ease; }
+}
